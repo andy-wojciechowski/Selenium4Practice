@@ -9,8 +9,9 @@ namespace Selenium4Practice.Pages
         private IWebDriver WebDriver { get; set; }
         private WebDriverWait WebDriverWait { get; set; }
 
-        public BasePage(IWebDriver webDriver!)
+        public BasePage(IWebDriver webDriver)
         {
+            if (webDriver is null) throw new ArgumentNullException(nameof(webDriver));
             WebDriver = webDriver;
             // TODO: Set the timeout dynamically
             WebDriverWait = new WebDriverWait(WebDriver, TimeSpan.FromSeconds(60));
