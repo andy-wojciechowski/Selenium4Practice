@@ -12,6 +12,7 @@ namespace Selenium4Practice.Pages
         public BasePage(IWebDriver webDriver!)
         {
             WebDriver = webDriver;
+            // TODO: Set the timeout dynamically
             WebDriverWait = new WebDriverWait(WebDriver, TimeSpan.FromSeconds(60));
         }
 
