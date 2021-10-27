@@ -3,7 +3,7 @@ using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
-using Selenium4Practice.Common.Enums;
+using Selenium4Practice.Framework.Enums;
 using System;
 
 namespace Selenium4Practice.Framework.WebDriver

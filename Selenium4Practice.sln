@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium4Practice.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium4Practice.Pages", "Selenium4Practice.Pages\Selenium4Practice.Pages.csproj", "{BE57901D-1853-45E5-9EFF-EFE34BF08B2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium4Practice.Common", "Selenium4Practice.Common\Selenium4Practice.Common.csproj", "{03EDE4F4-D154-4828-92DB-3DF8AC33C04E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Selenium4Practice.Framework", "Selenium4Practice.Framework\Selenium4Practice.Framework.csproj", "{03EDE4F4-D154-4828-92DB-3DF8AC33C04E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
