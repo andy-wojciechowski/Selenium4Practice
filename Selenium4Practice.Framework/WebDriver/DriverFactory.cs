@@ -6,7 +6,7 @@ using OpenQA.Selenium.Edge;
 using Selenium4Practice.Common.Enums;
 using System;
 
-namespace Selenium4Practice.Common.WebDriver
+namespace Selenium4Practice.Framework.WebDriver
 {
     public static class DriverFactory
     {

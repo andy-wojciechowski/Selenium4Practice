@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Selenium4Practice.Common.Extensions
+namespace Selenium4Practice.Framework.Extensions
 {
     public static class ObjectExtensions
     {

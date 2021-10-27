@@ -1,4 +1,4 @@
-namespace Selenium4Practice.Common.Enums
+namespace Selenium4Practice.Framework.Enums
 {
     public enum Browser
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Selenium4Practice.Common.Attributes
+namespace Selenium4Practice.Framework.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class TimeoutAttribute : Attribute
