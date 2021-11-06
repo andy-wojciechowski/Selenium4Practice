@@ -1,10 +1,11 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium4Practice.Framework.Interfaces
 {
     public interface ISeleniumObject
     {
-        IWebDriver WebDriver { get; internal set; }
-        int Timeout { get; internal set; }
+        IWebDriver WebDriver { get; set; }
+        WebDriverWait WebDriverWait { get; set; }
     }
 }

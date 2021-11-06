@@ -1,26 +1,27 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
-using System;
+using Selenium4Practice.Framework.Interfaces;
 
 namespace Selenium4Practice.Pages
 {
-    public abstract class BasePage
+    public abstract class BasePage : IPage
     {
-        private IWebDriver WebDriver { get; set; }
-        private WebDriverWait WebDriverWait { get; set; }
+        #region Properties
 
-        public BasePage(IWebDriver webDriver)
+        public IWebDriver WebDriver { get; set; }
+        public WebDriverWait WebDriverWait { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        public virtual void Navigate()
         {
-            if (webDriver is null) throw new ArgumentNullException(nameof(webDriver));
-            WebDriver = webDriver;
-            // TODO: Set the timeout dynamically
-            WebDriverWait = new WebDriverWait(WebDriver, TimeSpan.FromSeconds(60));
+            throw new System.NotImplementedException();
         }
-
-        public abstract bool IsAt();
-
-        public abstract void Navigate();
-
         public abstract void WaitForPage();
+        public virtual bool IsAt() => throw new System.NotImplementedException();
+
+        #endregion
     }
 }

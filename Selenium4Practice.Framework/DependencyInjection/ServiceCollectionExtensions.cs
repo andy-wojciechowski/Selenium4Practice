@@ -6,11 +6,14 @@ using Selenium4Practice.Framework.Interfaces;
 using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Attributes;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace Selenium4Practice.FrameworkndencyInjection
 {
     public static class ServiceCollectionExtensions
     {
+        private static readonly int DefaultTimeout = 30;
+
         public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, params Type[] assemblyMarkerTypes)
         {
             var assemblies = assemblyMarkerTypes.Select(x => x.Assembly).ToArray();
@@ -19,7 +22,7 @@ namespace Selenium4Practice.FrameworkndencyInjection
 
         public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, params Assembly[] assemblies)
         {
-            foreach(var assembly in assemblies)
+            foreach (var assembly in assemblies)
             {
                 var seleniumObjectTypes = assembly.DefinedTypes.Where(x => x.IsAssignableFrom(typeof(ISeleniumObject)) &&
                                                                       !x.IsAbstract && !x.IsInterface).ToList();
@@ -28,11 +31,12 @@ namespace Selenium4Practice.FrameworkndencyInjection
                     var serviceDescriptor = new ServiceDescriptor(type, serviceProvider => 
                     {
                         var webDriver = serviceProvider.GetRequiredService<IWebDriver>();
-                        var timeout = type.GetFirstAttributeOfType<TimeoutAttribute>().Timeout;
+                        var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
+                        var timeout = timeoutAttribute != null ? timeoutAttribute.Timeout : DefaultTimeout;
                         var instance = Activator.CreateInstance(type);
                         var seleniumObjectInstance = instance as ISeleniumObject;
                         seleniumObjectInstance.WebDriver = webDriver;
-                        seleniumObjectInstance.Timeout = timeout;
+                        seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
                         return seleniumObjectInstance;
                     }, ServiceLifetime.Transient);
                     services.Add(serviceDescriptor);
