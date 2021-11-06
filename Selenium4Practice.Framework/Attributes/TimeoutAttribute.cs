@@ -2,7 +2,7 @@ using System;
 
 namespace Selenium4Practice.Framework.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class TimeoutAttribute : Attribute
     {
         public int Timeout { get; }
