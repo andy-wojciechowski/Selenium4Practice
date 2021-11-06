@@ -8,7 +8,7 @@ using Selenium4Practice.Framework.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace Selenium4Practice.FrameworkndencyInjection
+namespace Selenium4Practice.Framework.DependencyResolution
 {
     public static class ServiceCollectionExtensions
     {
