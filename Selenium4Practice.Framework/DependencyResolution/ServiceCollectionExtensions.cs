@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Linq;
 using System;
+using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.Interfaces;
 using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Attributes;
@@ -14,13 +15,13 @@ namespace Selenium4Practice.Framework.DependencyResolution
     {
         private static readonly int DefaultTimeout = 30;
 
-        public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, params Type[] assemblyMarkerTypes)
+        public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, SeleniumObjectConfiguration config, params Type[] assemblyMarkerTypes)
         {
             var assemblies = assemblyMarkerTypes.Select(x => x.Assembly).ToArray();
-            return services.AddSeleniumObjectsInAssemblies(assemblies);
+            return services.AddSeleniumObjectsInAssemblies(config, assemblies);
         }
 
-        public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, params Assembly[] assemblies)
+        public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, SeleniumObjectConfiguration config, params Assembly[] assemblies)
         {
             foreach (var assembly in assemblies)
             {
@@ -34,9 +35,16 @@ namespace Selenium4Practice.Framework.DependencyResolution
                         var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
                         var timeout = timeoutAttribute != null ? timeoutAttribute.Timeout : DefaultTimeout;
                         var instance = Activator.CreateInstance(type);
-                        var seleniumObjectInstance = instance as ISeleniumObject;
+                        var seleniumObjectInstance = (ISeleniumObject)instance;
                         seleniumObjectInstance.WebDriver = webDriver;
                         seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
+                        if (type.IsAssignableFrom(typeof(IPage)))
+                        {
+                            var pageUrlAttribute = type.GetFirstAttributeOfType<PageUrlAttribute>();
+                            if (pageUrlAttribute == null) throw new Exception("A page url attribute is required for page objects");
+                            ((IPage)seleniumObjectInstance).BaseUrl = config.PageBaseUrl;
+                            ((IPage)seleniumObjectInstance).PageUrl = pageUrlAttribute.PageUrl;
+                        }
                         return seleniumObjectInstance;
                     }, ServiceLifetime.Transient);
                     services.Add(serviceDescriptor);

@@ -10,6 +10,9 @@ namespace Selenium4Practice.Pages
 
         public IWebDriver WebDriver { get; set; }
         public WebDriverWait WebDriverWait { get; set; }
+        public string BaseUrl { get; set; }
+        public string PageUrl { get; set; }
+        public string FullUrl => BaseUrl + PageUrl;
 
         #endregion
 
@@ -17,10 +20,11 @@ namespace Selenium4Practice.Pages
 
         public virtual void Navigate()
         {
-            throw new System.NotImplementedException();
+            WebDriver.Navigate().GoToUrl(FullUrl);
+            WaitForPage();
         }
         public abstract void WaitForPage();
-        public virtual bool IsAt() => throw new System.NotImplementedException();
+        public virtual bool IsAt() => WebDriver.Url == FullUrl;
 
         #endregion
     }
