@@ -2,7 +2,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium4Practice.Framework.Interfaces;
 
-namespace Selenium4Practice.Pages
+namespace Selenium4Practice.Pages.Infrastructure
 {
     public abstract class BasePage : IPage
     {
