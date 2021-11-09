@@ -8,9 +8,6 @@ namespace Selenium4Practice.Framework.Grid
     public static class SeleniumGridManager
     {
         private static readonly string JavaProcessName = "java";
-        private static readonly string ChromeDriverProcessName = "chromedriver.exe";
-        private static readonly string FirefoxDriverProcessName = "geckodriver.exe";
-        private static readonly string EdgeDriverProcessName = "msedgedriver.exe";
 
         public static void EnsureGridIsStarted(string gridJarPath, string seleniumServerUrl)
         {
