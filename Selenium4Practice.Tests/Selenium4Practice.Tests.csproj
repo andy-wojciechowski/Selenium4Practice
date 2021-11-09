@@ -16,4 +16,10 @@
     <PackageReference Include="Selenium.WebDriver" Version="4.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="docker-compose.yml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>  
+  </ItemGroup>
+
 </Project>
