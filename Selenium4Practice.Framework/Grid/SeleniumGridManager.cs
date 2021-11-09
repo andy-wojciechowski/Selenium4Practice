@@ -1,7 +1,7 @@
+using Selenium4Practice.Framework.Extensions;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System;
 
 namespace Selenium4Practice.Framework.Grid
 {
@@ -12,37 +12,24 @@ namespace Selenium4Practice.Framework.Grid
         private static readonly string FirefoxDriverProcessName = "geckodriver.exe";
         private static readonly string EdgeDriverProcessName = "msedgedriver.exe";
 
-        public static void EnsureGridIsStarted(string gridJarPath)
+        public static void EnsureGridIsStarted(string gridJarPath, string seleniumServerUrl)
         {
             var gridJarFileName = Path.GetFileName(gridJarPath);
             var gridProcess = Process.GetProcessesByName(JavaProcessName).FirstOrDefault(x => x.StartInfo.Arguments.Contains(gridJarFileName));
             if (gridProcess != null)
             {
-                var driverProcesses = Process.GetProcesses().Where(x => x.ProcessName == ChromeDriverProcessName || x.ProcessName == FirefoxDriverProcessName || x.ProcessName == EdgeDriverProcessName).ToList();
-                var gridRuntime = DateTime.Now - gridProcess.StartTime;
-                // If there are stale driver processes on the grid and the grid has been running for at least an hour
-                // Kill all of the Selenium processes and restart the grid
-                if (driverProcesses.Any() && gridRuntime.Hours >= 1)
-                {
-                    driverProcesses.ForEach(x => x.Kill());
-                    gridProcess.Kill();
-                    StartGridProcess(gridJarPath);
-                }
+                var seleniumGridSessionIds = SeleniumGridUtilities.GetCurrentSeleniumGridSessionIds(seleniumServerUrl);
+                seleniumGridSessionIds.ForEach(x => SeleniumGridUtilities.DeleteSeleniumGridSession(seleniumServerUrl, x));
             }
             else 
             {
-                StartGridProcess(gridJarPath);
+                var newGridProcess = new Process();
+                newGridProcess.StartInfo.UseShellExecute = false;
+                newGridProcess.StartInfo.CreateNoWindow = true;
+                newGridProcess.StartInfo.FileName = JavaProcessName;
+                newGridProcess.StartInfo.Arguments = $"-jar {gridJarPath} standalone";
+                newGridProcess.Start();            
             }
-        }
-
-        private static void StartGridProcess(string gridJarPath)
-        {
-            var gridProcess = new Process();
-            gridProcess.StartInfo.UseShellExecute = false;
-            gridProcess.StartInfo.CreateNoWindow = true;
-            gridProcess.StartInfo.FileName = JavaProcessName;
-            gridProcess.StartInfo.Arguments = $"-jar {gridJarPath} standalone";
-            gridProcess.Start();
         }
     }
 }
