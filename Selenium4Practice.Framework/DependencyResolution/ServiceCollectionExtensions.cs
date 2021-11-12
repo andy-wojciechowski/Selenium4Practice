@@ -25,7 +25,7 @@ namespace Selenium4Practice.Framework.DependencyResolution
         {
             foreach (var assembly in assemblies)
             {
-                var seleniumObjectTypes = assembly.DefinedTypes.Where(x => x.IsAssignableFrom(typeof(ISeleniumObject)) &&
+                var seleniumObjectTypes = assembly.DefinedTypes.Where(x => typeof(ISeleniumObject).IsAssignableFrom(x) &&
                                                                       !x.IsAbstract && !x.IsInterface).ToList();
                 foreach (var type in seleniumObjectTypes)
                 {
@@ -38,7 +38,7 @@ namespace Selenium4Practice.Framework.DependencyResolution
                         var seleniumObjectInstance = (ISeleniumObject)instance;
                         seleniumObjectInstance.WebDriver = webDriver;
                         seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
-                        if (type.IsAssignableFrom(typeof(IPage)))
+                        if (typeof(IPage).IsAssignableFrom(type))
                         {
                             var pageUrlAttribute = type.GetFirstAttributeOfType<PageUrlAttribute>();
                             if (pageUrlAttribute == null) throw new Exception("A page url attribute is required for page objects");
