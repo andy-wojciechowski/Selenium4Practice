@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Selenium4Practice.Framework.Enums;
 using Selenium4Practice.Tests.Infrastructure;
-using Selenium4Practice.Pages.Interfaces;
+using Selenium4Practice.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 
@@ -9,7 +9,7 @@ namespace Selenium4Practice.Tests.Docker
 {
     public class BasicTest : SeleniumDockerBaseTest
     {
-        private IHomePage HomePage { get; set; }
+        private HomePage HomePage { get; set; }
 
         public BasicTest(Browser browser) : base(browser)
         {
@@ -17,7 +17,7 @@ namespace Selenium4Practice.Tests.Docker
 
         protected override void InitializePageObjects()
         {
-            HomePage = ServiceProvider.GetService<IHomePage>();
+            HomePage = ServiceProvider.GetService<HomePage>();
         }
 
         [Test]

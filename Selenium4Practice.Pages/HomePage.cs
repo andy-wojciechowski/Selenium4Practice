@@ -1,13 +1,12 @@
 using OpenQA.Selenium;
 using Selenium4Practice.Framework.Attributes;
 using Selenium4Practice.Pages.Infrastructure;
-using Selenium4Practice.Pages.Interfaces;
 using SeleniumExtras.WaitHelpers;
 
 namespace Selenium4Practice.Pages
 {
     [PageUrl("/")]
-    public class HomePage : BasePage, IHomePage
+    public class HomePage : BasePage
     {
         #region Properties
 

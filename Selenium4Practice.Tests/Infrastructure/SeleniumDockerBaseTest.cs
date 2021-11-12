@@ -39,9 +39,12 @@ namespace Selenium4Practice.Tests.Infrastructure
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            var webDriver = ServiceProvider.GetService<IWebDriver>();
-            webDriver.Quit();
-            ServiceProvider.Dispose();
+            if (ServiceProvider != null)
+            {
+                var webDriver = ServiceProvider.GetService<IWebDriver>();
+                webDriver.Quit();
+                ServiceProvider.Dispose();
+            }
         }
 
         protected abstract void InitializePageObjects();
