@@ -14,7 +14,7 @@ namespace Selenium4Practice.Framework.Grid
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(seleniumServerUrl);
-                var gridStatus = httpClient.GetFromJsonAsync<SeleniumGridStatus>("/status").Result;
+                var gridStatus = httpClient.GetFromJsonAsync<SeleniumGridStatusResponse>("/status").Result.Value;
                 return gridStatus.Nodes.SelectMany(x => x.Slots).Where(x => x.Session != null).Select(x => x.Session.Id).ToList();
             }
         }
