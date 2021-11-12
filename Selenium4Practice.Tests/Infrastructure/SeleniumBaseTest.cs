@@ -27,7 +27,7 @@ namespace Selenium4Practice.Tests.Infrastructure
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            SeleniumGridManager.EnsureGridIsStarted(ConfigSettings.SeleniumGridJarPath, ConfigSettings.SeleniumServerUrl);
+            SeleniumGridManager.EnsureGridIsStarted(ConfigSettings.SeleniumGridJarPath);
             var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
             ServiceProvider = new ServiceCollection()
                 .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl))

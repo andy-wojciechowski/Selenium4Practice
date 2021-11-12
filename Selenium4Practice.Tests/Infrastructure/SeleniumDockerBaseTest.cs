@@ -27,7 +27,7 @@ namespace Selenium4Practice.Tests.Infrastructure
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            SeleniumDockerGridManager.EnsureGridIsStarted(ConfigSettings.DockerComposePath, ConfigSettings.SeleniumServerUrl, ConfigSettings.SeleniumGridContainerName);
+            SeleniumDockerGridManager.EnsureGridIsStarted(ConfigSettings.DockerComposePath, ConfigSettings.SeleniumGridContainerName);
             var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
             ServiceProvider = new ServiceCollection()
                 .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl))
