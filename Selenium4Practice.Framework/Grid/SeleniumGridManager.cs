@@ -1,19 +1,20 @@
 using Selenium4Practice.Framework.Extensions;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 
 namespace Selenium4Practice.Framework.Grid
 {
     public static class SeleniumGridManager
     {
         private static readonly string JavaProcessName = "java";
+        private static readonly int SeleniumServerPort = 4444;
 
         public static void EnsureGridIsStarted(string gridJarPath, string seleniumServerUrl)
         {
-            var gridJarFileName = Path.GetFileName(gridJarPath);
-            var gridProcess = Process.GetProcessesByName(JavaProcessName).FirstOrDefault(x => x.StartInfo.Arguments.Contains(gridJarFileName));
-            if (gridProcess != null)
+            var ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            var isSeleniumPortInUse = ipProperties.GetActiveTcpListeners().Any(x => x.Port == SeleniumServerPort);
+            if (isSeleniumPortInUse)
             {
                 var seleniumGridSessionIds = SeleniumGridUtilities.GetCurrentSeleniumGridSessionIds(seleniumServerUrl);
                 seleniumGridSessionIds.ForEach(x => SeleniumGridUtilities.DeleteSeleniumGridSession(seleniumServerUrl, x));
