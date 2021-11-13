@@ -1,12 +1,11 @@
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.DependencyResolution;
 using Selenium4Practice.Framework.Enums;
 using Selenium4Practice.Framework.Grid;
-using Selenium4Practice.Framework.WebDriver;
 using Selenium4Practice.Pages.Infrastructure;
-using OpenQA.Selenium;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Selenium4Practice.Tests.Infrastructure;
 
@@ -32,6 +31,8 @@ public abstract class SeleniumBaseTest
         ServiceProvider = new ServiceCollection()
             .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
+            .AddNetworkMonitoring()
+            .AddTestAttachmentHandlers()
             .BuildServiceProvider();
         InitializePageObjects();
     }

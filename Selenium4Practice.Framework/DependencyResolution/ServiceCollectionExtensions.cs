@@ -75,7 +75,7 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddtestAttachmentHandlers(this IServiceCollection services)
+    public static IServiceCollection AddTestAttachmentHandlers(this IServiceCollection services)
     {
         services.AddTransient<IJavaScriptLogsTestAttachmentHandler, JavaScriptLogsTestAttachmentHandler>();
         services.AddTransient<INetworkRequestLogsTestAttachmentHandler, NetworkRequestLogsTestAttachmentHandler>();

@@ -31,6 +31,8 @@ public abstract class SeleniumDockerBaseTest
         ServiceProvider = new ServiceCollection()
             .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
+            .AddNetworkMonitoring()
+            .AddTestAttachmentHandlers()
             .BuildServiceProvider();
         InitializePageObjects();
     }
