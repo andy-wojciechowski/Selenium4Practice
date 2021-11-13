@@ -30,7 +30,7 @@ namespace Selenium4Practice.Tests.Infrastructure
             SeleniumGridManager.EnsureGridIsStarted(ConfigSettings.SeleniumGridJarPath);
             var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
             ServiceProvider = new ServiceCollection()
-                .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl))
+                .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true))
                 .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
                 .BuildServiceProvider();
             InitializePageObjects();
