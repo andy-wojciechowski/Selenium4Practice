@@ -30,7 +30,12 @@ public abstract class SeleniumBaseTest
         SeleniumGridManager.EnsureGridIsStarted(ConfigSettings.SeleniumGridJarPath);
         var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
         ServiceProvider = new ServiceCollection()
-            .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true))
+            .AddSingleton(typeof(IWebDriver), _ =>
+            {
+                var driver = DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true);
+                driver.Manage().Window.Maximize();
+                return driver;
+            })
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
             .BuildServiceProvider();
         InitializePageObjects();

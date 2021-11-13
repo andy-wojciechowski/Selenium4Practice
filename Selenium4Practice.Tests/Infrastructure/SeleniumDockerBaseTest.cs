@@ -30,7 +30,12 @@ public abstract class SeleniumDockerBaseTest
         SeleniumDockerGridManager.EnsureGridIsStarted(ConfigSettings.DockerComposePath, ConfigSettings.SeleniumGridContainerName);
         var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
         ServiceProvider = new ServiceCollection()
-            .AddSingleton(typeof(IWebDriver), _ => DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl))
+            .AddSingleton(typeof(IWebDriver), _ =>
+            {
+                var driver = DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true);
+                driver.Manage().Window.Maximize();
+                return driver;
+            })
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
             .BuildServiceProvider();
         InitializePageObjects();
