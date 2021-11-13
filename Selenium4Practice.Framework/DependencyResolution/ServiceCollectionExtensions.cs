@@ -10,6 +10,9 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium4Practice.Framework.Enums;
 using Selenium4Practice.Framework.WebDriver;
+using Selenium4Practice.Framework.NetworkMonitoring;
+using Selenium4Practice.Framework.TestAttachments.Interfaces;
+using Selenium4Practice.Framework.TestAttachments;
 
 namespace Selenium4Practice.Framework.DependencyResolution;
 
@@ -63,6 +66,20 @@ public static class ServiceCollectionExtensions
             driver.Manage().Window.Maximize();
             return driver;
         });
+        return services;
+    }
+
+    public static IServiceCollection AddNetworkMonitoring(this IServiceCollection services)
+    {
+        services.AddSingleton<ISeleniumNetworkMonitor, SeleniumNetworkMonitor>();
+        return services;
+    }
+
+    public static IServiceCollection AddtestAttachmentHandlers(this IServiceCollection services)
+    {
+        services.AddTransient<IJavaScriptLogsTestAttachmentHandler, JavaScriptLogsTestAttachmentHandler>();
+        services.AddTransient<INetworkRequestLogsTestAttachmentHandler, NetworkRequestLogsTestAttachmentHandler>();
+        services.AddTransient<ISeleniumScreenshotTestAttachmentHandler, SeleniumScreenshotTestAttachmentHandler>();
         return services;
     }
 }
