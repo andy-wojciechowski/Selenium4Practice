@@ -1,6 +1,7 @@
 using Ductus.FluentDocker.Builders;
 using Ductus.FluentDocker.Services;
 using System.Linq;
+using Selenium4Practice.Framework.Extensions;
 
 namespace Selenium4Practice.Framework.Grid
 {
@@ -19,6 +20,14 @@ namespace Selenium4Practice.Framework.Grid
                     .FromFile(composePath)
                     .RemoveOrphans()
                     .Build().Start();
+            }
+            else if (seleniumGridContainer.State == ServiceRunningState.Stopped)
+            {
+                seleniumGridContainer.Start();
+                var nodeContainers = nativeDockerHost.GetContainers().Where(x => x.Image.Name.Contains("chrome") ||
+                                                                                 x.Image.Name.Contains("firefox") ||
+                                                                                 x.Image.Name.Contains("edge"));
+                nodeContainers.ForEach(x => x.Start());
             }
         }
     }
