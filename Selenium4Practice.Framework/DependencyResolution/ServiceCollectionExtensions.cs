@@ -8,6 +8,8 @@ using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Selenium4Practice.Framework.Enums;
+using Selenium4Practice.Framework.WebDriver;
 
 namespace Selenium4Practice.Framework.DependencyResolution;
 
@@ -50,6 +52,17 @@ public static class ServiceCollectionExtensions
                 services.Add(serviceDescriptor);
             }
         }
+        return services;
+    }
+
+    public static IServiceCollection AddWebDriver(this IServiceCollection services, Browser browser, string seleniumServerUrl)
+    {
+        services.AddSingleton(typeof(IWebDriver), _ =>
+        {
+            var driver = DriverFactory.CreateWebDriver(browser, seleniumServerUrl, true);
+            driver.Manage().Window.Maximize();
+            return driver;
+        });
         return services;
     }
 }

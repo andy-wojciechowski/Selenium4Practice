@@ -1,12 +1,11 @@
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.DependencyResolution;
 using Selenium4Practice.Framework.Enums;
 using Selenium4Practice.Framework.Grid;
-using Selenium4Practice.Framework.WebDriver;
 using Selenium4Practice.Pages.Infrastructure;
-using OpenQA.Selenium;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Selenium4Practice.Tests.Infrastructure;
 
@@ -30,12 +29,7 @@ public abstract class SeleniumDockerBaseTest
         SeleniumDockerGridManager.EnsureGridIsStarted(ConfigSettings.DockerComposePath, ConfigSettings.SeleniumGridContainerName);
         var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
         ServiceProvider = new ServiceCollection()
-            .AddSingleton(typeof(IWebDriver), _ =>
-            {
-                var driver = DriverFactory.CreateWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true);
-                driver.Manage().Window.Maximize();
-                return driver;
-            })
+            .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
             .BuildServiceProvider();
         InitializePageObjects();
