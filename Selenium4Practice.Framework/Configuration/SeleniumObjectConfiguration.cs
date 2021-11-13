@@ -1,7 +1,6 @@
-namespace Selenium4Practice.Framework.Configuration
+namespace Selenium4Practice.Framework.Configuration;
+
+public class SeleniumObjectConfiguration
 {
-    public class SeleniumObjectConfiguration
-    {
-        public string PageBaseUrl { get; set; }
-    }
+    public string PageBaseUrl { get; set; }
 }

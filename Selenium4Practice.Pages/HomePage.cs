@@ -3,22 +3,21 @@ using Selenium4Practice.Framework.Attributes;
 using Selenium4Practice.Pages.Infrastructure;
 using SeleniumExtras.WaitHelpers;
 
-namespace Selenium4Practice.Pages
+namespace Selenium4Practice.Pages;
+
+[PageUrl("/")]
+public class HomePage : BasePage
 {
-    [PageUrl("/")]
-    public class HomePage : BasePage
-    {
-        #region Properties
+    #region Properties
 
-        private By ContentLocator => By.Id("contcont");
+    private By ContentLocator => By.Id("contcont");
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        public override void WaitForPage() =>
-            WebDriverWait.Until(ExpectedConditions.ElementIsVisible(ContentLocator));
+    public override void WaitForPage() =>
+        WebDriverWait.Until(ExpectedConditions.ElementIsVisible(ContentLocator));
 
-        #endregion
-    }
+    #endregion
 }

@@ -9,48 +9,47 @@ using Selenium4Practice.Framework.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace Selenium4Practice.Framework.DependencyResolution
+namespace Selenium4Practice.Framework.DependencyResolution;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    private static readonly int DefaultTimeout = 30;
+
+    public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, SeleniumObjectConfiguration config, params Type[] assemblyMarkerTypes)
     {
-        private static readonly int DefaultTimeout = 30;
+        var assemblies = assemblyMarkerTypes.Select(x => x.Assembly).ToArray();
+        return services.AddSeleniumObjectsInAssemblies(config, assemblies);
+    }
 
-        public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, SeleniumObjectConfiguration config, params Type[] assemblyMarkerTypes)
+    public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, SeleniumObjectConfiguration config, params Assembly[] assemblies)
+    {
+        foreach (var assembly in assemblies)
         {
-            var assemblies = assemblyMarkerTypes.Select(x => x.Assembly).ToArray();
-            return services.AddSeleniumObjectsInAssemblies(config, assemblies);
-        }
-
-        public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, SeleniumObjectConfiguration config, params Assembly[] assemblies)
-        {
-            foreach (var assembly in assemblies)
+            var seleniumObjectTypes = assembly.DefinedTypes.Where(x => typeof(ISeleniumObject).IsAssignableFrom(x) &&
+                                                                  !x.IsAbstract && !x.IsInterface).ToList();
+            foreach (var type in seleniumObjectTypes)
             {
-                var seleniumObjectTypes = assembly.DefinedTypes.Where(x => typeof(ISeleniumObject).IsAssignableFrom(x) &&
-                                                                      !x.IsAbstract && !x.IsInterface).ToList();
-                foreach (var type in seleniumObjectTypes)
+                var serviceDescriptor = new ServiceDescriptor(type, serviceProvider =>
                 {
-                    var serviceDescriptor = new ServiceDescriptor(type, serviceProvider => 
+                    var webDriver = serviceProvider.GetRequiredService<IWebDriver>();
+                    var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
+                    var timeout = timeoutAttribute != null ? timeoutAttribute.Timeout : DefaultTimeout;
+                    var instance = Activator.CreateInstance(type);
+                    var seleniumObjectInstance = (ISeleniumObject)instance;
+                    seleniumObjectInstance.WebDriver = webDriver;
+                    seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
+                    if (typeof(IPage).IsAssignableFrom(type))
                     {
-                        var webDriver = serviceProvider.GetRequiredService<IWebDriver>();
-                        var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
-                        var timeout = timeoutAttribute != null ? timeoutAttribute.Timeout : DefaultTimeout;
-                        var instance = Activator.CreateInstance(type);
-                        var seleniumObjectInstance = (ISeleniumObject)instance;
-                        seleniumObjectInstance.WebDriver = webDriver;
-                        seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
-                        if (typeof(IPage).IsAssignableFrom(type))
-                        {
-                            var pageUrlAttribute = type.GetFirstAttributeOfType<PageUrlAttribute>();
-                            if (pageUrlAttribute == null) throw new Exception("A page url attribute is required for page objects");
-                            ((IPage)seleniumObjectInstance).BaseUrl = config.PageBaseUrl;
-                            ((IPage)seleniumObjectInstance).PageUrl = pageUrlAttribute.PageUrl;
-                        }
-                        return seleniumObjectInstance;
-                    }, ServiceLifetime.Transient);
-                    services.Add(serviceDescriptor);
-                }
+                        var pageUrlAttribute = type.GetFirstAttributeOfType<PageUrlAttribute>();
+                        if (pageUrlAttribute == null) throw new Exception("A page url attribute is required for page objects");
+                        ((IPage)seleniumObjectInstance).BaseUrl = config.PageBaseUrl;
+                        ((IPage)seleniumObjectInstance).PageUrl = pageUrlAttribute.PageUrl;
+                    }
+                    return seleniumObjectInstance;
+                }, ServiceLifetime.Transient);
+                services.Add(serviceDescriptor);
             }
-            return services;
         }
+        return services;
     }
 }

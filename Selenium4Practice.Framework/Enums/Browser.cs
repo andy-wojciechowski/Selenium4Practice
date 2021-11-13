@@ -1,9 +1,8 @@
-namespace Selenium4Practice.Framework.Enums
+namespace Selenium4Practice.Framework.Enums;
+
+public enum Browser
 {
-    public enum Browser
-    {
-        Chrome,
-        Firefox,
-        Edge
-    }
+    Chrome,
+    Firefox,
+    Edge
 }

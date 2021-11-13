@@ -1,11 +1,10 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace Selenium4Practice.Framework.Interfaces
+namespace Selenium4Practice.Framework.Interfaces;
+    
+public interface ISeleniumObject
 {
-    public interface ISeleniumObject
-    {
-        IWebDriver WebDriver { get; set; }
-        WebDriverWait WebDriverWait { get; set; }
-    }
+    IWebDriver WebDriver { get; set; }
+    WebDriverWait WebDriverWait { get; set; }
 }
