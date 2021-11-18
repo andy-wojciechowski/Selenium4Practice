@@ -6,7 +6,14 @@ namespace Selenium4Practice.Framework.TestAttachments;
 
 public class JavaScriptLogsTestAttachmentHandler : IJavaScriptLogsTestAttachmentHandler
 {
-    public void Execute(TestContext context, IWebDriver webDriver)
+    private readonly IWebDriver _webDriver;
+
+    public JavaScriptLogsTestAttachmentHandler(IWebDriver webDriver)
+    {
+        _webDriver = webDriver;
+    }
+
+    public void Execute(TestContext context)
     {
         throw new System.NotImplementedException();
     }
