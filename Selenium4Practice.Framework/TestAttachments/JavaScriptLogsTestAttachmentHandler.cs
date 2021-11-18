@@ -24,10 +24,14 @@ public class JavaScriptLogsTestAttachmentHandler : IJavaScriptLogsTestAttachment
         if (context.Result.Outcome == ResultState.Failure || context.Result.Outcome == ResultState.Error)
         {
             var jsErrors = _webDriver.Manage().Logs.GetLog(LogType.Browser).Where(x => x.Level == LogLevel.Severe).ToList();
-            var logFileName = $"JS Errors {context.Test.MethodName} {Guid.NewGuid()}.txt";
-            var log = new LoggerConfiguration().WriteTo.File(logFileName).CreateLogger();
-            jsErrors.ForEach(x => log.Information(x.Message));
-            var fullFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{logFileName}";
+            if (jsErrors.Any())
+            {
+                var logFileName = $"JS Errors {context.Test.MethodName} {Guid.NewGuid()}.txt";
+                var log = new LoggerConfiguration().WriteTo.File(logFileName).CreateLogger();
+                jsErrors.ForEach(x => log.Information(x.Message));
+                var fullFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{logFileName}";
+                TestContext.AddTestAttachment(fullFilePath);
+            }
         }
     }
 }

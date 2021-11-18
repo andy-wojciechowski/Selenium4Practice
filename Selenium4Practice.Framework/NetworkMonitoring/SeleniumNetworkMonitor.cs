@@ -11,7 +11,7 @@ public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
 
     public SeleniumNetworkMonitor()
     {
-        NetworkResponses = new Dictionary<string, NetworkResponseReceivedEventArgs>();
+        NetworkRequests = new Dictionary<string, NetworkRequestSentEventArgs>();
         NetworkResponses = new Dictionary<string, NetworkResponseReceivedEventArgs>();
         AreEventHandlersSubscribed = false;
     }
