@@ -53,13 +53,13 @@ public abstract class SeleniumDockerBaseTest
     }
 
     [SetUp]
-    public void SetUp() => ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring(ServiceProvider.GetService<IWebDriver>());
+    public void SetUp() => ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring();
 
     [TearDown]
     public void TearDown()
     {
         var networkMonitor = ServiceProvider.GetService<ISeleniumNetworkMonitor>();
-        networkMonitor.StopMonitoring(ServiceProvider.GetService<IWebDriver>());
+        networkMonitor.StopMonitoring();
         GetTestAttachmentHandlers().ForEach(x => x.Execute(TestContext.CurrentContext));
         networkMonitor.ClearNetworkData();
     }

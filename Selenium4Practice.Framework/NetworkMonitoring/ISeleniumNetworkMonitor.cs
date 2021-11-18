@@ -7,8 +7,8 @@ public interface ISeleniumNetworkMonitor
 {
     IDictionary<string, NetworkRequestSentEventArgs> NetworkRequests { get; }
     IDictionary<string, NetworkResponseReceivedEventArgs> NetworkResponses { get; }
-    void StartMonitoring(IWebDriver webDriver);
-    void StopMonitoring(IWebDriver webDriver);
+    void StartMonitoring();
+    void StopMonitoring();
     void ClearNetworkData();
     void RequestRecievedHandler(object sender, NetworkRequestSentEventArgs requestEventArgs);
     void ResponseRecievedHandler(object sender, NetworkResponseReceivedEventArgs responseEventArgs);
