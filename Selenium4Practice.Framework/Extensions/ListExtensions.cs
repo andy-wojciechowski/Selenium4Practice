@@ -3,7 +3,7 @@ using System;
 
 namespace Selenium4Practice.Framework.Extensions;
 
-internal static class ListExtensions
+public static class ListExtensions
 {
     public static void ForEach<T>(this IList<T> source, Action<T> action)
     {

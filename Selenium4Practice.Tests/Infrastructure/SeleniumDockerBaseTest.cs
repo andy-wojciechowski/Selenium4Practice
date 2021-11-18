@@ -4,8 +4,12 @@ using OpenQA.Selenium;
 using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.DependencyResolution;
 using Selenium4Practice.Framework.Enums;
+using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Grid;
+using Selenium4Practice.Framework.NetworkMonitoring;
+using Selenium4Practice.Framework.TestAttachments.Interfaces;
 using Selenium4Practice.Pages.Infrastructure;
+using System.Collections.Generic;
 
 namespace Selenium4Practice.Tests.Infrastructure;
 
@@ -48,5 +52,24 @@ public abstract class SeleniumDockerBaseTest
         }
     }
 
+    [SetUp]
+    public void SetUp() => ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring(ServiceProvider.GetService<IWebDriver>());
+
+    [TearDown]
+    public void TearDown()
+    {
+        var networkMonitor = ServiceProvider.GetService<ISeleniumNetworkMonitor>();
+        networkMonitor.StopMonitoring(ServiceProvider.GetService<IWebDriver>());
+        GetTestAttachmentHandlers().ForEach(x => x.Execute(TestContext.CurrentContext));
+        networkMonitor.ClearNetworkData();
+    }
+
     protected abstract void InitializePageObjects();
+
+    private IList<ITestAttachmentHandler> GetTestAttachmentHandlers() => new List<ITestAttachmentHandler>()
+    {
+        ServiceProvider.GetService<IJavaScriptLogsTestAttachmentHandler>(),
+        ServiceProvider.GetService<INetworkRequestLogsTestAttachmentHandler>(),
+        ServiceProvider.GetService<ISeleniumScreenshotTestAttachmentHandler>()
+    };
 }
