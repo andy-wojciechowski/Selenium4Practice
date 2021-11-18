@@ -1,18 +1,18 @@
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using System.Linq;
-using System;
-using Selenium4Practice.Framework.Configuration;
-using Selenium4Practice.Framework.Interfaces;
-using Selenium4Practice.Framework.Extensions;
-using Selenium4Practice.Framework.Attributes;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using Selenium4Practice.Framework.Attributes;
+using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.Enums;
-using Selenium4Practice.Framework.WebDriver;
+using Selenium4Practice.Framework.Extensions;
+using Selenium4Practice.Framework.Interfaces;
 using Selenium4Practice.Framework.NetworkMonitoring;
-using Selenium4Practice.Framework.TestAttachments.Interfaces;
 using Selenium4Practice.Framework.TestAttachments;
+using Selenium4Practice.Framework.TestAttachments.Interfaces;
+using Selenium4Practice.Framework.WebDriver;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Selenium4Practice.Framework.DependencyResolution;
 
@@ -34,7 +34,7 @@ public static class ServiceCollectionExtensions
                                                                   !x.IsAbstract && !x.IsInterface).ToList();
             foreach (var type in seleniumObjectTypes)
             {
-                var serviceDescriptor = new ServiceDescriptor(type, serviceProvider =>
+                services.AddTransient(type, serviceProvider =>
                 {
                     var webDriver = serviceProvider.GetRequiredService<IWebDriver>();
                     var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
@@ -51,8 +51,7 @@ public static class ServiceCollectionExtensions
                         ((IPage)seleniumObjectInstance).PageUrl = pageUrlAttribute.PageUrl;
                     }
                     return seleniumObjectInstance;
-                }, ServiceLifetime.Transient);
-                services.Add(serviceDescriptor);
+                });
             }
         }
         return services;
