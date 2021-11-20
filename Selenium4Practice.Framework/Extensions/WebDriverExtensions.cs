@@ -1,9 +1,12 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 
 namespace Selenium4Practice.Framework.Extensions;
 
 public static class WebDriverExtensions
 {
+    private const string DevToolsCapability = "se:cdp";
+
     public static bool TryGetelement(this IWebDriver webDriver, By locator, out IWebElement element)
     {
         try
@@ -19,4 +22,10 @@ public static class WebDriverExtensions
     }
 
     public static bool IsElementDisplayed(this IWebDriver webDriver, By locator) => webDriver.TryGetelement(locator, out var element) ? element.Displayed : false;
+
+    public static bool HasDevToolsCapability(this IWebDriver webDriver)
+    {
+        var remoteWebDriver = webDriver as RemoteWebDriver;
+        return remoteWebDriver.Capabilities.HasCapability(DevToolsCapability);
+    }
 }

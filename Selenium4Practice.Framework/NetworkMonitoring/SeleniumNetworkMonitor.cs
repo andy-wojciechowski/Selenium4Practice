@@ -1,12 +1,12 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Remote;
+using Selenium4Practice.Framework.Extensions;
 using System.Collections.Generic;
 
 namespace Selenium4Practice.Framework.NetworkMonitoring;
 
 public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
 {
-    private const string DevToolsCapability = "se:cdp";
     private readonly IWebDriver _webDriver;
     private bool AreEventHandlersSubscribed { get; }
     public IDictionary<string, NetworkRequestSentEventArgs> NetworkRequests { get; }
@@ -22,7 +22,7 @@ public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
 
     public void StartMonitoring()
     {
-        if (HasDevToolsCapability())
+        if (_webDriver.HasDevToolsCapability())
         {
             if (!AreEventHandlersSubscribed)
             {
@@ -35,7 +35,7 @@ public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
 
     public void StopMonitoring()
     {
-        if (HasDevToolsCapability())
+        if (_webDriver.HasDevToolsCapability())
         {
             _webDriver.Manage().Network.StopMonitoring().GetAwaiter().GetResult();
             ClearNetworkData();
@@ -51,10 +51,4 @@ public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
     public void RequestRecievedHandler(object _, NetworkRequestSentEventArgs requestEventArgs) => NetworkRequests.Add(requestEventArgs.RequestId, requestEventArgs);
 
     public void ResponseRecievedHandler(object _, NetworkResponseReceivedEventArgs responseEventArgs) => NetworkResponses.Add(responseEventArgs.RequestId, responseEventArgs);
-
-    private bool HasDevToolsCapability()
-    {
-        var remoteWebDriver = _webDriver as RemoteWebDriver;
-        return remoteWebDriver.Capabilities.HasCapability(DevToolsCapability);
-    }
 }
