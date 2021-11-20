@@ -58,11 +58,11 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddWebDriver(this IServiceCollection services, Browser browser, string seleniumServerUrl)
+    public static IServiceCollection AddWebDriver(this IServiceCollection services, Browser browser, string seleniumServerUrl, bool setFirefoxBinary = false)
     {
         services.AddSingleton(typeof(IWebDriver), _ =>
         {
-            var driver = DriverFactory.CreateWebDriver(browser, seleniumServerUrl, true);
+            var driver = DriverFactory.CreateWebDriver(browser, seleniumServerUrl, setFirefoxBinary);
             driver.Manage().Window.Maximize();
             return driver;
         });

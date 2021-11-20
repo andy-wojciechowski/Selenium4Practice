@@ -33,7 +33,7 @@ public abstract class SeleniumBaseTest
         SeleniumGridManager.EnsureGridIsStarted(ConfigSettings.SeleniumGridJarPath);
         var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
         ServiceProvider = new ServiceCollection()
-            .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
+            .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl, true)
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
             .AddDevToolsMonitors()
             .AddTestAttachmentHandlers()

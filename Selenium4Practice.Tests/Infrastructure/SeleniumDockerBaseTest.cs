@@ -55,8 +55,13 @@ public abstract class SeleniumDockerBaseTest
     [SetUp]
     public void SetUp() 
     {
-        ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring();
-        ServiceProvider.GetService<ISeleniumConsoleLogMonitor>().StartMonitoring();
+        // There seems to be a problem with the chrome container which makes the WS url for dev tools point to 0.0.0.0
+        // which causes problems with docker. So, disable the monitors for chrome with docker
+        if (Browser != Browser.Chrome)
+        {
+            ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring();
+            ServiceProvider.GetService<ISeleniumConsoleLogMonitor>().StartMonitoring();
+        }
     } 
 
     [TearDown]
@@ -64,8 +69,13 @@ public abstract class SeleniumDockerBaseTest
     {
         var networkMonitor = ServiceProvider.GetService<ISeleniumNetworkMonitor>();
         var consoleLogMonitor = ServiceProvider.GetService<ISeleniumConsoleLogMonitor>();
-        networkMonitor.StopMonitoring();
-        consoleLogMonitor.StopMonitoring();
+        // There seems to be a problem with the chrome container which makes the WS url for dev tools point to 0.0.0.0
+        // which causes problems with docker. So, disable the monitors for chrome with docker
+        if (Browser != Browser.Chrome)
+        {
+            networkMonitor.StopMonitoring();
+            consoleLogMonitor.StopMonitoring();
+        }
         GetTestAttachmentHandlers().ForEach(x => x.Execute(TestContext.CurrentContext));
         networkMonitor.ClearNetworkData();
         consoleLogMonitor.ClearLogMessages();
