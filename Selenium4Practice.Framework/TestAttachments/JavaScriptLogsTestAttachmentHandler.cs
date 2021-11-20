@@ -26,7 +26,7 @@ public class JavaScriptLogsTestAttachmentHandler : IJavaScriptLogsTestAttachment
             var jsErrors = _webDriver.Manage().Logs.GetLog(LogType.Browser).Where(x => x.Level == LogLevel.Severe).ToList();
             if (jsErrors.Any())
             {
-                var logFileName = $"JS Errors {context.Test.MethodName} {Guid.NewGuid()}.txt";
+                var logFileName = $"JS_Errors_{context.Test.MethodName}_{Guid.NewGuid()}.txt";
                 var log = new LoggerConfiguration().WriteTo.File(logFileName).CreateLogger();
                 jsErrors.ForEach(x => log.Information(x.Message));
                 var fullFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{logFileName}";

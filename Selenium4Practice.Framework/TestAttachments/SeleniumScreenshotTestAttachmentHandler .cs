@@ -22,7 +22,7 @@ public class SeleniumScreenshotTestAttachmentHandler : ISeleniumScreenshotTestAt
         if (context.Result.Outcome == ResultState.Failure || context.Result.Outcome == ResultState.Error)
         {
             var screenshot = (ITakesScreenshot)_webDriver;
-            var filePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{context.Test.MethodName} {Guid.NewGuid()}.png";
+            var filePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{context.Test.MethodName}{Guid.NewGuid()}.png";
             screenshot.GetScreenshot().SaveAsFile(filePath, ScreenshotImageFormat.Png);
             TestContext.AddTestAttachment(filePath);
         }

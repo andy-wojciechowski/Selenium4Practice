@@ -23,14 +23,15 @@ public class NetworkRequestLogsTestAttachmentHandler : INetworkRequestLogsTestAt
     {
         if (context.Result.Outcome == ResultState.Failure || context.Result.Outcome == ResultState.Error)
         {
-            var failedResponses = _seleniumNetworkMonitor.NetworkResponses.Where(x => x.Value.ResponseStatusCode != 200);
+            var failedResponses = _seleniumNetworkMonitor.NetworkResponses.Where(x => x.Value.ResponseStatusCode != 200).ToList();
             if (failedResponses.Any())
             {
-                var logFileName = $"Network Errors {context.Test.MethodName} {Guid.NewGuid()}.txt";
+                var logFileName = $"Network_Errors_{context.Test.MethodName}_{Guid.NewGuid()}.txt";
                 var log = new LoggerConfiguration().WriteTo.File(logFileName).CreateLogger();
                 foreach (var failedResponse in failedResponses)
                 {
-                    var requestMethod = _seleniumNetworkMonitor.NetworkRequests.Single(x => x.Key == failedResponse.Key).Value.RequestMethod;
+                    var request = _seleniumNetworkMonitor.NetworkRequests.FirstOrDefault(x => x.Key == failedResponse.Key);
+                    var requestMethod = !request.Equals(default) ? request.Value.RequestMethod : string.Empty;
                     log.Information($"{requestMethod} {failedResponse.Value.ResponseUrl} {failedResponse.Value.ResponseBody}");
                 }
                 var fullFilePath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\{logFileName}";
