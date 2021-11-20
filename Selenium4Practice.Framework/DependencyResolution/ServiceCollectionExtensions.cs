@@ -69,9 +69,10 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddNetworkMonitoring(this IServiceCollection services)
+    public static IServiceCollection AddDevToolsMonitors(this IServiceCollection services)
     {
         services.AddSingleton<ISeleniumNetworkMonitor, SeleniumNetworkMonitor>();
+        services.AddSingleton<ISeleniumConsoleLogMonitor, SeleniumConsoleLogMonitor>();
         return services;
     }
 

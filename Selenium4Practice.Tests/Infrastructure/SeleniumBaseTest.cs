@@ -35,7 +35,7 @@ public abstract class SeleniumBaseTest
         ServiceProvider = new ServiceCollection()
             .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
             .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
-            .AddNetworkMonitoring()
+            .AddDevToolsMonitors()
             .AddTestAttachmentHandlers()
             .BuildServiceProvider();
         InitializePageObjects();
@@ -53,15 +53,22 @@ public abstract class SeleniumBaseTest
     }
 
     [SetUp]
-    public void SetUp() => ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring();
+    public void SetUp()
+    {
+        ServiceProvider.GetService<ISeleniumNetworkMonitor>().StartMonitoring();
+        ServiceProvider.GetService<ISeleniumConsoleLogMonitor>().StartMonitoring();
+    }
 
     [TearDown]
     public void TearDown()
     {
         var networkMonitor = ServiceProvider.GetService<ISeleniumNetworkMonitor>();
+        var consoleLogMonitor = ServiceProvider.GetService<ISeleniumConsoleLogMonitor>();
         networkMonitor.StopMonitoring();
+        consoleLogMonitor.StopMonitoring();
         GetTestAttachmentHandlers().ForEach(x => x.Execute(TestContext.CurrentContext));
         networkMonitor.ClearNetworkData();
+        consoleLogMonitor.ClearLogMessages();
     }
 
     protected abstract void InitializePageObjects();

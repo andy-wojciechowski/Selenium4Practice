@@ -25,7 +25,7 @@ public static class WebDriverExtensions
 
     public static bool HasDevToolsCapability(this IWebDriver webDriver)
     {
-        var remoteWebDriver = webDriver as RemoteWebDriver;
+        var remoteWebDriver = (RemoteWebDriver)webDriver;
         return remoteWebDriver.Capabilities.HasCapability(DevToolsCapability);
     }
 }
