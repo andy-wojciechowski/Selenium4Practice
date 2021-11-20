@@ -1,8 +1,9 @@
 ﻿using OpenQA.Selenium;
+using Selenium4Practice.Framework.DevToolsMonitors.Interfaces;
 using Selenium4Practice.Framework.Extensions;
 using System.Collections.Generic;
 
-namespace Selenium4Practice.Framework.NetworkMonitoring;
+namespace Selenium4Practice.Framework.DevToolsMonitors;
 
 public class SeleniumNetworkMonitor : ISeleniumNetworkMonitor
 {

@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using Selenium4Practice.Framework.NetworkMonitoring;
+using Selenium4Practice.Framework.DevToolsMonitors.Interfaces;
 using Selenium4Practice.Framework.TestAttachments.Interfaces;
 using Serilog;
 using System;
