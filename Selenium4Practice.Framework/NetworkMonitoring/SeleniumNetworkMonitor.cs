@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
 using Selenium4Practice.Framework.Extensions;
 using System.Collections.Generic;
 
