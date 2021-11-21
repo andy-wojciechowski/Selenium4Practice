@@ -21,7 +21,7 @@ public static class WebDriverExtensions
         }
     }
 
-    public static bool IsElementDisplayed(this IWebDriver webDriver, By locator) => webDriver.TryGetelement(locator, out var element) ? element.Displayed : false;
+    public static bool IsElementDisplayed(this IWebDriver webDriver, By locator) => webDriver.TryGetelement(locator, out var element) && element.Displayed;
 
     public static bool HasDevToolsCapability(this IWebDriver webDriver)
     {
