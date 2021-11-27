@@ -32,19 +32,14 @@ public class SignUpModal : BaseDemoblazeModal
         return this;
     }
 
-    public string LogIn(bool alertPresentAfterLogin = false)
+    public string LogIn()
     {
         LoginButton.Click();
-        if (alertPresentAfterLogin)
-        {
-            var alert = WebDriver.SwitchTo().Alert();
-            var alertText = alert.Text;
-            alert.Accept();
-            WaitForModalToBeClosed();
-            return alertText;
-        }
+        var alert = WebDriver.SwitchTo().Alert();
+        var alertText = alert.Text;
+        alert.Accept();
         WaitForModalToBeClosed();
-        return null;
+        return alertText;
     }
 
     #endregion
