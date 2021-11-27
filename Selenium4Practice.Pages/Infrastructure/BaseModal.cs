@@ -12,7 +12,7 @@ public abstract class BaseModal : IModal
 
     public IWebDriver WebDriver { get; set; }
     public WebDriverWait WebDriverWait { get; set; }
-    public abstract By Trait { get; set; }
+    public abstract By Trait { get; }
 
     #endregion
 
