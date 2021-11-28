@@ -5,6 +5,6 @@ public interface IPage : ISeleniumObject
     string BaseUrl { get; set; }
     string PageUrl { get; set; }
     bool IsAt();
-    void Navigate();
+    void Navigate(params object[] urlArgs);
     void WaitForPage();
 }

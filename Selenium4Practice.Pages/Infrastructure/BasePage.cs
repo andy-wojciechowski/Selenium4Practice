@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium4Practice.Framework.Interfaces;
+using System.Linq;
 
 namespace Selenium4Practice.Pages.Infrastructure;
 
@@ -18,9 +19,10 @@ public abstract class BasePage : IPage
 
     #region Public Methods
 
-    public virtual void Navigate()
+    public virtual void Navigate(params object[] urlArgs)
     {
-        WebDriver.Navigate().GoToUrl(FullUrl);
+        var urlToUse = urlArgs.Any() ? string.Format(FullUrl, urlArgs) : FullUrl;
+        WebDriver.Navigate().GoToUrl(urlToUse);
         WaitForPage();
     }
     public abstract void WaitForPage();
