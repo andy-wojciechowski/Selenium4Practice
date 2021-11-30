@@ -22,23 +22,11 @@ namespace Selenium4Practice.Pages.Modals;
 
     #region Public Methods
 
-    public ContactUsModal WithContactEmail(string contactEmail)
-    {
-        ContactEmailTextbox.EnterTextInInput(contactEmail);
-        return this;
-    }
+    public ContactUsModal WithContactEmail(string contactEmail) => this.EnterTextInInput(p => p.ContactEmailTextbox, contactEmail);
 
-    public ContactUsModal WithContactName(string contactName)
-    {
-        ContactNameTextoox.EnterTextInInput(contactName);
-        return this;
-    }
+    public ContactUsModal WithContactName(string contactName) => this.EnterTextInInput(p => p.ContactNameTextoox, contactName);
 
-    public ContactUsModal WithMessage(string message)
-    {
-        MessageText.EnterTextInInput(message);
-        return this;
-    }
+    public ContactUsModal WithMessage(string message) => this.EnterTextInInput(p => p.MessageText, message);
 
     public string SendMessage()
     {

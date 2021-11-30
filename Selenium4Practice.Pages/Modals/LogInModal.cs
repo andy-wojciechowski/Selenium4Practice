@@ -20,17 +20,9 @@ public class LogInModal : BaseDemoblazeModal
 
     #region Public Methods
 
-    public LogInModal WithUserName(string userName)
-    {
-        UserNameTextbox.EnterTextInInput(userName);
-        return this;
-    }
+    public LogInModal WithUserName(string userName) => this.EnterTextInInput(p => p.UserNameTextbox, userName);
 
-    public LogInModal WithPassword(string password)
-    {
-        PasswordTextbox.EnterTextInInput(password);
-        return this;
-    }
+    public LogInModal WithPassword(string password) => this.EnterTextInInput(p => p.PasswordTextbox, password);
 
     public string LogIn(bool alertPresentAfterLogin = false)
     {

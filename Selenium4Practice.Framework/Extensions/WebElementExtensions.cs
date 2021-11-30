@@ -11,10 +11,10 @@ namespace Selenium4Practice.Framework.Extensions
             callback();
         }
 
-        public static void EnterTextInInput(this IWebElement webelement, string text)
+        public static void EnterTextInInput(this IWebElement webElement, string text)
         {
-            webelement.Clear();
-            webelement.SendKeys(text);
+            webElement.Clear();
+            webElement.SendKeys(text);
         }
     }
 }

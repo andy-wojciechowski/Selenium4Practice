@@ -20,17 +20,9 @@ public class SignUpModal : BaseDemoblazeModal
 
     #region Public Methods
 
-    public SignUpModal WithUserName(string userName)
-    {
-        UserNameTextbox.EnterTextInInput(userName);
-        return this;
-    }
+    public SignUpModal WithUserName(string userName) => this.EnterTextInInput(p => p.UserNameTextbox, userName);
 
-    public SignUpModal WithPassword(string password)
-    {
-        PasswordTextbox.EnterTextInInput(password);
-        return this;
-    }
+    public SignUpModal WithPassword(string password) => this.EnterTextInInput(p => p.PasswordTextbox, password);
 
     public string LogIn()
     {
