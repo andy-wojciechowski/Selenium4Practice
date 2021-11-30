@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium4Practice.Framework.Interfaces;
+using Selenium4Practice.Pages.Elements;
 using System.Linq;
 
 namespace Selenium4Practice.Pages.Infrastructure;
@@ -14,6 +15,10 @@ public abstract class BasePage : IPage
     public string BaseUrl { get; set; }
     public string PageUrl { get; set; }
     public string FullUrl => BaseUrl + PageUrl;
+
+    private By NavbarLocator => By.TagName("nav");
+
+    public Navbar Navbar => new(WebDriver.FindElement(NavbarLocator));
 
     #endregion
 
