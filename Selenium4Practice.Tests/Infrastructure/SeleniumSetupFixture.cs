@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using Selenium4Practice.Tests.Infrastructure;
+﻿using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 using WebDriverManager;
 using WebDriverManager.DriverConfigs;
 using WebDriverManager.DriverConfigs.Impl;
@@ -10,13 +10,15 @@ public class SeleniumSetupFixture
 {
     private const string VersionText = "<version>";
 
+    public static IConfiguration Config { get; } = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
         var webDriverManager = new DriverManager();
-        webDriverManager.SetUpDriver(GetDriveUrl(new ChromeConfig()), ConfigSettings.SeleniumDriversPath);
-        webDriverManager.SetUpDriver(GetDriveUrl(new FirefoxConfig()), ConfigSettings.SeleniumDriversPath);
-        webDriverManager.SetUpDriver(GetDriveUrl(new EdgeConfig()), ConfigSettings.SeleniumDriversPath);
+        webDriverManager.SetUpDriver(GetDriveUrl(new ChromeConfig()), Config["SeleniumDriversPath"]);
+        webDriverManager.SetUpDriver(GetDriveUrl(new FirefoxConfig()), Config["SeleniumDriversPath"]);
+        webDriverManager.SetUpDriver(GetDriveUrl(new EdgeConfig()), Config["SeleniumDriversPath"]);
     }
 
     private string GetDriveUrl(IDriverConfig driverConfig) => driverConfig.GetUrl32().Replace(VersionText, driverConfig.GetLatestVersion());

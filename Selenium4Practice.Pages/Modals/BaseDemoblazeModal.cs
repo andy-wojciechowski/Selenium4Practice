@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Selenium4Practice.Framework.Extensions;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 using Selenium4Practice.Pages.Infrastructure;
 using SeleniumExtras.WaitHelpers;
 
@@ -24,6 +25,7 @@ public abstract class BaseDemoblazeModal : BaseModal
 
     #region Public Methods
 
+    public BaseDemoblazeModal(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer) : base(webDriver, seleniumObjectInitializer) { }
     public override void WaitForModalToBeClosed() => WebDriverWait.Until(ExpectedConditions.InvisibilityOfElementLocated(Trait));
     public void ClickUpperRightCloseButton() => UpperRightCloseButton.Click(WaitForModalToBeClosed);
     public void ClickFooterCloseButton() => FooterCloseButton.Click(WaitForModalToBeClosed);

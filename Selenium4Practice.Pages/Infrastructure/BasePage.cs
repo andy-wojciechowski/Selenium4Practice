@@ -1,6 +1,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using Selenium4Practice.Framework.Interfaces;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 using Selenium4Practice.Pages.Elements;
 using System.Linq;
 
@@ -23,6 +24,12 @@ public abstract class BasePage : IPage
     #endregion
 
     #region Public Methods
+
+    public BasePage(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer)
+    {
+        WebDriver = webDriver;
+        seleniumObjectInitializer.InitializeSeleniumObject(this);
+    }
 
     public virtual void Navigate(params object[] urlArgs)
     {

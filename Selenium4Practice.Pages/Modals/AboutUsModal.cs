@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 
 namespace Selenium4Practice.Pages.Modals;
  
@@ -8,4 +9,6 @@ namespace Selenium4Practice.Pages.Modals;
     private By VideoLocator => By.Id("example-video");
 
     public IWebElement Video => ModalElement.FindElement(VideoLocator);
+
+    public AboutUsModal(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer) : base(webDriver, seleniumObjectInitializer) { }
 }

@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Selenium4Practice.Framework.Extensions;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 using Selenium4Practice.Pages.Infrastructure;
 
 namespace Selenium4Practice.Pages.Modals;
@@ -21,6 +22,8 @@ public class PlaceOrderConfirmationModal : BaseModal
     #endregion
 
     #region Public Methods
+
+    public PlaceOrderConfirmationModal(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer) : base(webDriver, seleniumObjectInitializer) { }
 
     public void Confirm() => ConfirmButton.Click(WaitForModalToBeClosed);
 

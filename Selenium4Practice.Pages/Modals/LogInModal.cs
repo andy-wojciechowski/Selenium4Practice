@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Selenium4Practice.Framework.Extensions;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 
 namespace Selenium4Practice.Pages.Modals;
 
@@ -19,6 +20,8 @@ public class LogInModal : BaseDemoblazeModal
     #endregion
 
     #region Public Methods
+
+    public LogInModal(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer) : base(webDriver, seleniumObjectInitializer) { }
 
     public LogInModal WithUserName(string userName) => this.EnterTextInInput(p => p.UserNameTextbox, userName);
 

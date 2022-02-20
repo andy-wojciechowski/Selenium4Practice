@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Selenium4Practice.Framework.Extensions;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 
 namespace Selenium4Practice.Pages.Modals;
  
@@ -21,6 +22,8 @@ namespace Selenium4Practice.Pages.Modals;
     #endregion
 
     #region Public Methods
+
+    public ContactUsModal(IWebDriver webDriver, ISeleniumObjectInitializer seleniumObjectInitializer) : base(webDriver, seleniumObjectInitializer) { }
 
     public ContactUsModal WithContactEmail(string contactEmail) => this.EnterTextInInput(p => p.ContactEmailTextbox, contactEmail);
 

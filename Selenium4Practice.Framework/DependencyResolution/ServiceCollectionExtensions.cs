@@ -1,13 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
-using Selenium4Practice.Framework.Attributes;
-using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.DevToolsMonitors;
 using Selenium4Practice.Framework.DevToolsMonitors.Interfaces;
 using Selenium4Practice.Framework.Enums;
-using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Interfaces;
+using Selenium4Practice.Framework.SeleniumObjects;
+using Selenium4Practice.Framework.SeleniumObjects.Interfaces;
 using Selenium4Practice.Framework.TestAttachments;
 using Selenium4Practice.Framework.TestAttachments.Interfaces;
 using Selenium4Practice.Framework.WebDriver;
@@ -19,48 +16,26 @@ namespace Selenium4Practice.Framework.DependencyResolution;
 
 public static class ServiceCollectionExtensions
 {
-    private static readonly int DefaultTimeout = 30;
-
-    public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, SeleniumObjectConfiguration config, params Type[] assemblyMarkerTypes)
+    public static IServiceCollection AddSeleniumObjectsContainingTypes(this IServiceCollection services, params Type[] assemblyMarkerTypes)
     {
         var assemblies = assemblyMarkerTypes.Select(x => x.Assembly).ToArray();
-        return services.AddSeleniumObjectsInAssemblies(config, assemblies);
+        return services.AddSeleniumObjectsInAssemblies(assemblies);
     }
 
-    public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, SeleniumObjectConfiguration config, params Assembly[] assemblies)
+    public static IServiceCollection AddSeleniumObjectsInAssemblies(this IServiceCollection services, params Assembly[] assemblies)
     {
         foreach (var assembly in assemblies)
         {
             var seleniumObjectTypes = assembly.DefinedTypes.Where(x => typeof(ISeleniumObject).IsAssignableFrom(x) &&
                                                                   !x.IsAbstract && !x.IsInterface).ToList();
-            foreach (var type in seleniumObjectTypes)
-            {
-                services.AddTransient(type, serviceProvider =>
-                {
-                    var webDriver = serviceProvider.GetRequiredService<IWebDriver>();
-                    var timeoutAttribute = type.GetFirstAttributeOfType<TimeoutAttribute>();
-                    var timeout = timeoutAttribute != null ? timeoutAttribute.Timeout : DefaultTimeout;
-                    var instance = Activator.CreateInstance(type);
-                    var seleniumObjectInstance = (ISeleniumObject)instance;
-                    seleniumObjectInstance.WebDriver = webDriver;
-                    seleniumObjectInstance.WebDriverWait = new WebDriverWait(seleniumObjectInstance.WebDriver, TimeSpan.FromSeconds(timeout));
-                    if (typeof(IPage).IsAssignableFrom(type))
-                    {
-                        var pageUrlAttribute = type.GetFirstAttributeOfType<PageUrlAttribute>();
-                        if (pageUrlAttribute == null) throw new Exception("A page url attribute is required for page objects");
-                        ((IPage)seleniumObjectInstance).BaseUrl = config.PageBaseUrl;
-                        ((IPage)seleniumObjectInstance).PageUrl = pageUrlAttribute.PageUrl;
-                    }
-                    return seleniumObjectInstance;
-                });
-            }
+            seleniumObjectTypes.ForEach(type => services.AddTransient(type));
         }
         return services;
     }
 
     public static IServiceCollection AddWebDriver(this IServiceCollection services, Browser browser, string seleniumServerUrl, bool setFirefoxBinary = false)
     {
-        services.AddSingleton(typeof(IWebDriver), _ =>
+        services.AddSingleton(_ =>
         {
             var driver = DriverFactory.CreateWebDriver(browser, seleniumServerUrl, setFirefoxBinary);
             driver.Manage().Window.Maximize();
@@ -81,6 +56,12 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IJavaScriptLogsTestAttachmentHandler, JavaScriptLogsTestAttachmentHandler>();
         services.AddTransient<INetworkRequestLogsTestAttachmentHandler, NetworkRequestLogsTestAttachmentHandler>();
         services.AddTransient<ISeleniumScreenshotTestAttachmentHandler, SeleniumScreenshotTestAttachmentHandler>();
+        return services;
+    }
+
+    public static IServiceCollection AddSeleniumObjectInitializer(this IServiceCollection services)
+    {
+        services.AddTransient<ISeleniumObjectInitializer, SeleniumObjectInitializer>();
         return services;
     }
 }

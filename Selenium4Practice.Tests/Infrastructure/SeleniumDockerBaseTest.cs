@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using Selenium4Practice.Framework.Configuration;
 using Selenium4Practice.Framework.DependencyResolution;
 using Selenium4Practice.Framework.DevToolsMonitors.Interfaces;
 using Selenium4Practice.Framework.Enums;
@@ -9,6 +8,7 @@ using Selenium4Practice.Framework.Extensions;
 using Selenium4Practice.Framework.Grid;
 using Selenium4Practice.Framework.TestAttachments.Interfaces;
 using Selenium4Practice.Pages.Infrastructure;
+using System;
 using System.Collections.Generic;
 
 namespace Selenium4Practice.Tests.Infrastructure;
@@ -20,7 +20,7 @@ public abstract class SeleniumDockerBaseTest
 {
     private Browser Browser { get; }
     protected IWebDriver WebDriver { get; set; }
-    protected ServiceProvider ServiceProvider { get; set; }
+    protected IServiceProvider ServiceProvider { get; set; }
 
     public SeleniumDockerBaseTest(Browser browser)
     {
@@ -30,13 +30,15 @@ public abstract class SeleniumDockerBaseTest
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        SeleniumDockerGridManager.EnsureGridIsStarted(ConfigSettings.DockerComposePath, ConfigSettings.SeleniumGridContainerName);
-        var seleniumObjectConfig = new SeleniumObjectConfiguration() { PageBaseUrl = ConfigSettings.BaseUrl };
+        var config = SeleniumSetupFixture.Config;
+        SeleniumDockerGridManager.EnsureGridIsStarted(config["DockerComposePath"], config["SeleniumGridContainerName"]);
         ServiceProvider = new ServiceCollection()
-            .AddWebDriver(Browser, ConfigSettings.SeleniumServerUrl)
-            .AddSeleniumObjectsContainingTypes(seleniumObjectConfig, typeof(IPageObjectAssemblyMarker))
+            .AddSingleton(config)
+            .AddWebDriver(Browser, config["SeleniumServerUrl"])
+            .AddSeleniumObjectsContainingTypes(typeof(IPageObjectAssemblyMarker))
             .AddDevToolsMonitors()
             .AddTestAttachmentHandlers()
+            .AddSeleniumObjectInitializer()
             .BuildServiceProvider();
         InitializePageObjects();
     }
